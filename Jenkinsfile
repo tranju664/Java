@@ -3,7 +3,7 @@ pipeline{
     stages{
        stage('Git Checkout Stage'){
             steps{
-                git branch: 'main', url: 'https://github.com/tranju664/Sonar-Qube-war-example.git'
+                git branch: 'main', url: 'https://github.com/tranju664/Sample-Java-springboot.git'
             }
          }        
        stage('Build Stage'){

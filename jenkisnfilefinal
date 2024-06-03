@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Stage') {
+            steps {
+                sh 'mvn clean install'
+            }
+            post {
+                success {
+                    script {
+                        def server = Artifactory.newServer url: 'http://3.109.206.53:8081/artifactory/', credentialsId: 'jfrog'
+                        def rtMaven = Artifactory.newMavenBuild()
+                        rtMaven.deployer server: server, releaseRepo: 'libs-release/', snapshotRepo: 'libs-snapshot/'
+                        rtMaven.tool = 'maven'
+                        rtMaven.run pom: 'pom.xml', goals: 'clean install'
+                    }
+                }
+            }
+        }
+        stage('Deploy and Push to ECR') {
+            agent {
+                label 'docker' // Specify the label of the agent that has Docker installed
+            }
+            steps {
+                script {
+                    sh 'curl -o jenkins-test-1.0.jar http://3.109.206.53:8081/artifactory/libs-release/com/example/jenkins-test/1.0/jenkins-test-1.0.jar'
+                    withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_CREDENTIALS')]) {
+                        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest'
+                        sh 'docker build -t sstest .'  // Ensure Dockerfile is present in the workspace
+                        sh 'docker tag sstest:latest 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest:latest'
+                        sh 'docker push 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest:latest'
+                    }
+                }
+            }
+        }
+    }
+}

@@ -11,4 +11,4 @@ COPY jenkins-test-1.0.jar /app/jenkins-test-1.0.jar
 WORKDIR /app
 
 # Define the command to run the Java application when the container starts
-ENTRYPOINT ["java", "-jar", "jenkins-test-1.0.jar"]
+ENTRYPOINT ["java", "-jar", "/app/jenkins-test-1.0.jar"]

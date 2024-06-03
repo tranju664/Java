@@ -25,8 +25,11 @@ pipeline {
                 script {
                     sh 'curl -o jenkins-test-1.0.jar http://3.109.206.53:8081/artifactory/libs-release/com/example/jenkins-test/1.0/jenkins-test-1.0.jar'
                 }
-                withAWS(credentials: 'aws-ecr-credentials', region: 'ap-south-1') {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-ecr-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     script {
+                        sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
+                        sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
+                        sh 'aws configure set default.region ap-south-1'
                         sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 804480554088.dkr.ecr.ap-south-1.amazonaws.com'
                         sh 'docker build -t sstest .'  // Ensure Dockerfile is present in the workspace
                         sh 'docker tag sstest:latest 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest:latest'

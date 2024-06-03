@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Deploy and Push to ECR') {
             agent {
-                label 'docker' // Specify the label of the agent that has Docker installed
+                label 'jfrog' // Specify the label of the agent that has Docker installed
             }
             steps {
                 script {

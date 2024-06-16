@@ -41,10 +41,16 @@ pipeline {
                     sh '''
                         curl -o jenkins-test-1.0.jar ${ARTIFACTORY_URL}${ARTIFACTORY_REPO}com/example/jenkins-test/1.0/jenkins-test-1.0.jar
                     
-                        docker login -u AWS -p "$(aws ecr get-login-password --region ${AWS_DEFAULT_REGION})" ${ECR_REPOSITORY}
+                        # Log into AWS ECR
+                        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}
                     
+                        # Build Docker image
                         sudo docker build -t sstest .
+                    
+                        # Tag Docker image
                         sudo docker tag sstest:latest ${ECR_REPOSITORY}/sstest:latest
+                    
+                        # Push Docker image to ECR
                         sudo docker push ${ECR_REPOSITORY}/sstest:latest
                     '''
                 }

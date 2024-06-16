@@ -2,6 +2,9 @@ pipeline {
     agent any
     stages {
         stage('Build Stage') {
+            agent {
+                label 'jfrog'
+            } 
             steps {
                 sh 'mvn clean install'
             }

@@ -43,20 +43,15 @@ pipeline {
                     
                         # Log into AWS ECR
                         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY}
-                        if [ $? -eq 0 ]; then
-                            echo "Docker login successful"
-                            # Build Docker image
-                            sudo docker build -t sstest .
                     
-                            # Tag Docker image
-                            sudo docker tag sstest:latest ${ECR_REPOSITORY}/sstest:latest
+                        # Build Docker image
+                        sudo docker build -t sstest .
                     
-                            # Push Docker image to ECR
-                            sudo docker push ${ECR_REPOSITORY}/sstest:latest
-                        else
-                            echo "Docker login failed"
-                            exit 1
-                        fi
+                        # Tag Docker image
+                        sudo docker tag sstest:latest ${ECR_REPOSITORY}/sstest:latest
+                    
+                        # Push Docker image to ECR
+                        sudo docker push ${ECR_REPOSITORY}/sstest:latest
                     '''
                 }
             }

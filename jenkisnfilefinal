@@ -7,6 +7,9 @@ pipeline {
     }
     stages {
         stage('Build Stage') {
+            agent {
+                label 'jfrog'
+            }
             steps {
                 sh 'mvn clean install'
             }
@@ -24,7 +27,7 @@ pipeline {
         }
         stage('Deploy and Push to ECR') {
             agent {
-                label 'deploy' // Specify the label of the agent that has Docker installed
+                label 'jfrog'
             }
             steps {
                 script {

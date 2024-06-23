@@ -23,8 +23,8 @@ spec:
       labels:
         app: ss
     spec:
-      #serviceAccountName: edx-sa
-      #automountServiceAccountToken: false
+      serviceAccountName: eks-sa
+      automountServiceAccountToken: false
       restartPolicy: Always
       containers:
       #- image: AWSACCOUNT.dkr.ecr.us-east-1.amazonaws.com/REPOSITORY-ecr:ENVIRONMENT

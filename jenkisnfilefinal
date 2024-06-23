@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Deploy and Push to ECR') {
             agent {
-                label 'deploy'
+                label 'jfrog'
             }
             steps {
                 script {

@@ -40,8 +40,9 @@ pipeline {
                         docker push 804480554088.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/sstest:latest
                         aws eks update-kubeconfig --region ap-south-1 --name cluster-eksctl
                         kubectl apply -f manifest.yaml
-                        sleep 60
+                        sleep 20
                         kubectl get pods -n ss-dev
+                        kubectl get sa -n ss-dev
                     '''
                 }
             }

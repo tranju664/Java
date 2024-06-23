@@ -4,9 +4,8 @@ metadata:
   name: ss-dev
   
 ---
-
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: ss-springboot
   namespace: ss-dev

@@ -29,7 +29,7 @@ spec:
       containers:
       #- image: AWSACCOUNT.dkr.ecr.us-east-1.amazonaws.com/REPOSITORY-ecr:ENVIRONMENT
       - image: 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest
-        name: SS
+        name: ss
         imagePullPolicy: Always
         env:
         - name: TZ

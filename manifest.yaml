@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ss-dev
+  
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ss-springboot
+  namespace: ss-dev
+  annotations:
+    kubernetes.io/change-cause: "Release 1.1 Version"
+  labels:
+    app: SS
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: SS
+  template:
+    metadata:
+      labels:
+        app: SS
+    spec:
+      #serviceAccountName: edx-sa
+      #automountServiceAccountToken: false
+      restartPolicy: Always
+      containers:
+      #- image: AWSACCOUNT.dkr.ecr.us-east-1.amazonaws.com/REPOSITORY-ecr:ENVIRONMENT
+      - image: 804480554088.dkr.ecr.ap-south-1.amazonaws.com/sstest
+        name: SS
+        imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: America/New_York
+        ports:
+        - containerPort: 8080
+          protocol: TCP        
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: SS
+  namespace: edx-backend-ENVIRONMENT
+  labels:
+    run: ss-dev
+spec:
+  type: NodePort
+  selector:
+    app: SS
+  ports:
+  - port: 8080
+    protocol: TCP
+    #nodePort: 31082
+    name: http

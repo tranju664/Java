@@ -45,8 +45,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: SS
-  namespace: edx-backend-ENVIRONMENT
-  labels:
+  namespace: ss-dev
     run: ss-dev
 spec:
   type: NodePort
